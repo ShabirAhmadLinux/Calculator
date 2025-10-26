@@ -1,0 +1,70 @@
+button {
+    width: 70px;
+    height: 70px;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator {
+    height: 700px;
+    width: 600px;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 16px;
+}
+
+.previousResult {
+    height: 50px;
+    border: 2px solid red;
+}
+
+.currentDisplay {
+    border: 2px solid darkgreen;
+    height: 75px;
+}
+
+.buttonPad {
+    flex: 3;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 16px;
+}
+
+.numbersAndOnscreenOperations,
+.mathOperations {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid;
+    gap: 30px;
+}
+
+.onscreenAndModulo,
+.numbersAndDot {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 70px;
+}
+
+.numbersAndOnscreenOperations {
+    flex: 4;
+}
+
+.mathOperations {
+    flex: 1;
+}
