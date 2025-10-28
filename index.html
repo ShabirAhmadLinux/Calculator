@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
     <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
     <div class="calculator">
@@ -16,7 +17,7 @@
             <div class="numbersAndOnscreenOperations">
                 <div class="onscreenAndModulo">
                     <button class="clear">AC</button>
-                    <button class="modulo">%</button>
+                    <button class="modulo" id="%">%</button>
                     <button class="backspace">⌫</button>
                 </div>
                 <div class="numbersAndDot" >
@@ -44,10 +45,10 @@
 
             </div>
             <div class="mathOperations">
-              <button class="divide">➗</button>
-              <button class="multiply">✖️</button>
-              <button class="minus">➖</button>
-              <button class="plus">➕</button>
+              <button class="divide operation" id="÷">➗</button>
+              <button class="multiply operation" id="x">✖️</button>
+              <button class="minus operation" id="-">➖</button>
+              <button class="plus operation" id="+">➕</button>
               <button class="equals">🟰</button>
             </div>
         </div>
