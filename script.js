@@ -1,20 +1,27 @@
+function round(num){
+    let fractionalPart=num-parseInt(num)+"";
+    if(fractionalPart.slice(2).length>5){
+        return num.toFixed(5);
+    }
+    return num
+}
 function add(num1, num2) {
-    return num1 + num2;
+    return round(num1 + num2);
 }
 function subtract(num1, num2) {
-    return num1 - num2;
+    return round(num1 - num2);
 }
 function multiply(num1, num2) {
-    return num1 * num2;
+    return round(num1 * num2);
 }
 function divide(num1, num2) {
-    if(num2===0){
+    if (num2 === 0) {
         alert("dude really 😑");
     }
-    return num1 / num2;
+    return round(num1 / num2);
 }
 function modulo(num1, num2) {
-    return num1 % num2;
+    return round(num1 % num2);
 }
 
 let number1;
@@ -54,9 +61,9 @@ numberAndScreenOperationsButtons.addEventListener("click", (e) => {
         previousResult.textContent = "";
         operatorFlag = false;
     }
-    if(e.target.className== "modulo"){
+    if (e.target.className == "modulo") {
         if (!operatorFlag) {
-            previousResult.textContent =currentDisplay.textContent + e.target.id;
+            previousResult.textContent = currentDisplay.textContent + e.target.id;
             display = "";
             currentDisplay.textContent = "";
             operatorFlag = true;
@@ -80,13 +87,19 @@ numberAndScreenOperationsButtons.addEventListener("click", (e) => {
 let operatorFlag = false;
 let mathOperations = document.querySelector(".mathOperations");
 mathOperations.addEventListener("click", (e) => {
-       let prev = previousResult.textContent;
+    let prev = previousResult.textContent;
     if (e.target.className.includes("operation")) {
+        if(e.target.id==='-'&&display.length===0){
+            display='-';
+            currentDisplay.textContent=display;
+            return;
+        }
         if (!operatorFlag) {
-            previousResult.textContent =currentDisplay.textContent + e.target.id;
+            previousResult.textContent = currentDisplay.textContent + e.target.id;
             display = "";
             currentDisplay.textContent = "";
             operatorFlag = true;
+            containsDot = false;
         }
         else if (display === "") {
             previousResult.textContent = prev.slice(0, prev.length - 1) + e.target.id;
@@ -100,6 +113,7 @@ mathOperations.addEventListener("click", (e) => {
             let result = operate(num1, num2, operator) + e.target.id;
             console.log(result);
             previousResult.textContent = result;
+            containsDot = false;
         }
     }
     else {
@@ -107,8 +121,50 @@ mathOperations.addEventListener("click", (e) => {
         let operator = prev.at(prev.length - 1);
         let num2 = parseFloat(display);
         display = "";
-        previousResult.textContent="";
+        previousResult.textContent = "";
         currentDisplay.textContent = operate(num1, num2, operator);
+        operatorFlag = false;
+        containsDot = false;
+    }
+});
+
+
+let containsDot = false;
+let dot = document.querySelector(".dot");
+dot.addEventListener("click", (e) => {
+    if (!containsDot) {
+        display += ".";
+        currentDisplay.textContent = display;
+        containsDot = true;
+    }
+})
+
+let backspace = document.querySelector(".backspace");
+backspace.addEventListener("click", () => {
+    let lastChar = display.at(-1);
+    if("123467890+-x%÷".includes(lastChar)){
         operatorFlag=false;
     }
+    if(lastChar==="."){
+        containsDot=false;
+    }
+
+    if(display.length===0){
+        display=previousResult.textContent.slice(0,previousResult.textContent.length);
+        currentDisplay.textContent=display;
+        previousResult.textContent="";
+        operatorFlag=false;
+    }
+    if (display.length ===1) {
+        display = previousResult.textContent;
+        currentDisplay.textContent = display;
+        previousResult.textContent = "";
+    }
+    else {
+        display = display.slice(0, display.length - 1);
+        currentDisplay.textContent = display;
+    }
+
+    
+    
 });
