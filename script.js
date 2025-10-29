@@ -162,15 +162,6 @@ function clickBackspace() {
 }
 backspace.addEventListener("click", clickBackspace);
 
-currentDisplay.addEventListener("keydown", (e) => {
-    let lastPressedKey = e.key;
-    if ("1234567890".includes(lastPressedKey)) {
-        display += lastPressedKey;
-        currentDisplay.textContent = display;
-    }
-    console.log(lastPressedKey);
-});
-
 document.addEventListener("keydown", (e) => {
     let charObject = {
         target: {
