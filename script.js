@@ -1,6 +1,6 @@
-function round(num){
-    let fractionalPart=num-parseInt(num)+"";
-    if(fractionalPart.slice(2).length>5){
+function round(num) {
+    let fractionalPart = num - parseInt(num) + "";
+    if (fractionalPart.slice(2).length > 5) {
         return num.toFixed(5);
     }
     return num
@@ -50,10 +50,13 @@ const previousResult = document.querySelector(".previousResult");
 const numberAndScreenOperationsButtons = document.querySelector(".numbersAndOnscreenOperations");
 let display = "";
 
+function addNumber(e) {
+    display += e.target.id;
+    currentDisplay.textContent = display;
+}
 numberAndScreenOperationsButtons.addEventListener("click", (e) => {
     if (e.target.className === "number") {
-        display += e.target.id;
-        currentDisplay.textContent = display;
+        addNumber(e);
     }
     if (e.target.className === "clear") {
         display = "";
@@ -62,109 +65,131 @@ numberAndScreenOperationsButtons.addEventListener("click", (e) => {
         operatorFlag = false;
     }
     if (e.target.className == "modulo") {
-        if (!operatorFlag) {
-            previousResult.textContent = currentDisplay.textContent + e.target.id;
-            display = "";
-            currentDisplay.textContent = "";
-            operatorFlag = true;
-        }
-        else if (display === "") {
-            previousResult.textContent = prev.slice(0, prev.length - 1) + e.target.id;
-        }
-        else {
-            let num1 = parseFloat(prev.slice(0, prev.length - 1));
-            let operator = prev.at(prev.length - 1);
-            let num2 = parseFloat(display);
-            display = "";
-            currentDisplay.textContent = "";
-            let result = operate(num1, num2, operator) + e.target.id;
-            console.log(result);
-            previousResult.textContent = result;
-        }
+        addOperator(e);
     }
 
 });
 let operatorFlag = false;
 let mathOperations = document.querySelector(".mathOperations");
-mathOperations.addEventListener("click", (e) => {
+
+function addOperator(e) {
     let prev = previousResult.textContent;
-    if (e.target.className.includes("operation")) {
-        if(e.target.id==='-'&&display.length===0){
-            display='-';
-            currentDisplay.textContent=display;
-            return;
-        }
-        if (!operatorFlag) {
-            previousResult.textContent = currentDisplay.textContent + e.target.id;
-            display = "";
-            currentDisplay.textContent = "";
-            operatorFlag = true;
-            containsDot = false;
-        }
-        else if (display === "") {
-            previousResult.textContent = prev.slice(0, prev.length - 1) + e.target.id;
-        }
-        else {
-            let num1 = parseFloat(prev.slice(0, prev.length - 1));
-            let operator = prev.at(prev.length - 1);
-            let num2 = parseFloat(display);
-            display = "";
-            currentDisplay.textContent = "";
-            let result = operate(num1, num2, operator) + e.target.id;
-            console.log(result);
-            previousResult.textContent = result;
-            containsDot = false;
-        }
+    if (e.target.id === '-' && display.length === 0) {
+        display = '-';
+        currentDisplay.textContent = display;
+        return;
     }
-    else {
+    if (!operatorFlag && display.length > 0 && display !== '-') {
+        previousResult.textContent = currentDisplay.textContent + e.target.id;
+        display = "";
+        currentDisplay.textContent = "";
+        operatorFlag = true;
+        containsDot = false;
+    }
+    else if (display === "" && prev.length > 0) {
+        previousResult.textContent = prev.slice(0, prev.length - 1) + e.target.id;
+    }
+    else if (prev.length > 0 && display.length > 0 & display !== '-') {
         let num1 = parseFloat(prev.slice(0, prev.length - 1));
         let operator = prev.at(prev.length - 1);
         let num2 = parseFloat(display);
         display = "";
-        previousResult.textContent = "";
-        currentDisplay.textContent = operate(num1, num2, operator);
-        operatorFlag = false;
+        currentDisplay.textContent = "";
+        let result = operate(num1, num2, operator) + e.target.id;
+        console.log(result);
+        previousResult.textContent = result;
         containsDot = false;
+    }
+}
+
+function pressEnter() {
+    let prev = previousResult.textContent;
+    let num1 = parseFloat(prev.slice(0, prev.length - 1));
+    let operator = prev.at(prev.length - 1);
+    let num2 = parseFloat(display);
+    display = "";
+    previousResult.textContent = "";
+    currentDisplay.textContent = operate(num1, num2, operator);
+    operatorFlag = false;
+    containsDot = false;
+}
+
+mathOperations.addEventListener("click", (e) => {
+
+    if (e.target.className.includes("operation")) {
+        addOperator(e);
+    }
+    else {
+        pressEnter();
     }
 });
 
 
 let containsDot = false;
 let dot = document.querySelector(".dot");
-dot.addEventListener("click", (e) => {
+
+function addDot() {
     if (!containsDot) {
         display += ".";
         currentDisplay.textContent = display;
         containsDot = true;
     }
-})
+}
+
+dot.addEventListener("click", addDot);
 
 let backspace = document.querySelector(".backspace");
-backspace.addEventListener("click", () => {
+
+function clickBackspace() {
     let lastChar = display.at(-1);
-    if("123467890+-x%÷".includes(lastChar)){
-        operatorFlag=false;
+    if ("123467890+-x%÷".includes(lastChar)) {
+        operatorFlag = false;
     }
-    if(lastChar==="."){
-        containsDot=false;
+    if (lastChar === ".") {
+        containsDot = false;
     }
 
-    if(display.length===0){
-        display=previousResult.textContent.slice(0,previousResult.textContent.length);
-        currentDisplay.textContent=display;
-        previousResult.textContent="";
-        operatorFlag=false;
-    }
-    if (display.length ===1) {
-        display = previousResult.textContent;
+    if (display.length === 0) {
+        display = previousResult.textContent.slice(0, previousResult.textContent.length - 1);
         currentDisplay.textContent = display;
         previousResult.textContent = "";
+        operatorFlag = false;
     }
     else {
         display = display.slice(0, display.length - 1);
         currentDisplay.textContent = display;
     }
+}
+backspace.addEventListener("click", clickBackspace);
 
-    
-    
+currentDisplay.addEventListener("keydown", (e) => {
+    let lastPressedKey = e.key;
+    if ("1234567890".includes(lastPressedKey)) {
+        display += lastPressedKey;
+        currentDisplay.textContent = display;
+    }
+    console.log(lastPressedKey);
+});
+
+document.addEventListener("keydown", (e) => {
+    let charObject = {
+        target: {
+            id: e.key
+        }
+    };
+    let lastPressedKey = e.key;
+    if ("1234567890".includes(lastPressedKey)) {
+        display += lastPressedKey;
+        currentDisplay.textContent = display;
+    }
+    if (lastPressedKey === 'Backspace') {
+        clickBackspace();
+    }
+    if ("+-x/*÷".includes(e.key)) {
+        addOperator(charObject);
+    }
+    if (lastPressedKey == "Enter") {
+        pressEnter();
+    }
+    console.log(lastPressedKey + ` ${typeof lastPressedKey} ${charObject.target.id}`);
 });
